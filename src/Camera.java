@@ -62,4 +62,16 @@ public class Camera {
         }
         return null;
     }
+
+    public static Camera findCamera(int id, ArrayList<Camera> cameras)
+    {
+        for (Camera c : cameras)
+        {
+            if(c.getID() == id)
+            {
+                return c;
+            }
+        }
+        return null;
+    }
 }
