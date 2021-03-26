@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Coordinate {
     private int x;
@@ -110,8 +109,12 @@ public class Coordinate {
                 if(obstacle.getTop1().getZ() > getZ())  //chỉ xét những điểm nào nằm dưới chiều cao của vật
                 {
                     //do something
-
-                    //nếu cắt => chỉnh lại seenByCameras của this => break;
+                    //nhìn thấy khi:
+                    //+) đường thẳng không cắt qua bề mặt nào
+                    //+) bình phương khoảng cách nhỏ hơn bình phương deepVision
+                    //+) gọi điểm hiện tại là a; thỏa mãn khi góc tạo bởi aOy nhỏ hơn góc tạp bởi phân giác camera vs Oy
+                    //nếu giữa điểm this và camera thứ n bị gián đoạn bởi vật thể => set seenByCamera[n] = 0
+                    //ngược lại bẳng 1
                 }
             }
         }
