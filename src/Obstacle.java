@@ -28,7 +28,6 @@ public class Obstacle {
         setColor(color);
 
         //Tạo các mặt phẳng tọa độ
-
     }
 
 
@@ -74,13 +73,6 @@ public class Obstacle {
 
         return result;
     }
-
-/*
-    public void draw()
-    {
-
-    }
-*/
 
     public Coordinate getTop1() {
         return top1;
