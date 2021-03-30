@@ -1,1 +1,42 @@
-Hello 
+1) xác định vùng bị chắn không nhìn được bởi camera => xét từng tọa độ, xem với từng camera, tọa độ đó có nhìn được bởi camera đó không.
+Nhìn được xác định bởi 2 yếu tố:
+a) Đường thẳng nối từ tọa độ đó đến camera không cắt vật nào (không cắt bất kỳ mặt nào trong 5 mặt của vật thể)
+b) Bình phương khoảng cách từ tọa độ đến camera nhỏ hơn deepVision của camera.
+c) Đường thẳng nối từ tọa độ đến camera tạo với mặt phẳng phân giác của camera 1 góc nhỏ hơn góc nhìn được quy định trước của camera
+------------------------------------------------------------------------------------------------------------------------------------------
+Cả a) b) c) sẽ được xử lý trong beSeen của class Coordinate
+Hướng làm:
+a) Chạy 2 vòng lặp lồng nhau (lặp camera và lặp vật (obstacles)). Chỉ xét những tọa độ thỏa mãn tọa độ nằm bên ngoài 8 góc của vật
+=> Tiết kiệm thời gian để xét sang vật khác.
+- Với mỗi vật (class Obstacle) xét 5 bề mặt (surface1 -> 5). Các surface được viết dưới dạng ArrayList bao gồm 16 phần tử.
+	+) 4 phần tử đầu là A, B, C, D trong phương trình mặt phẳng Ax + By + Cz = D (A, B, C, D là int)
+	+) 12 phần tử sau là 4 đầu mút giới hạn mặt phẳng. Mỗi đầu mút có 3 tọa độ nên 3 * 4 = 12 (Do ArrayList được khai báo lưu giá trị kiểu int)
+	(4 đầu mút được đánh thứ tự lần lượt theo chiều kim đồng hồ, top1 nằm ngay trên bottom1, được khai báo từ dòng 4 -> 12 trong class Obstacle)
+- Hàm getVector trong class Coordinate trả về kết quả dạng ArrayList bao gồm 6 phần tử:
+	+) Phương trình đường thẳng trong Oxyz được viết dưới dạng tham số t
+		x = a * t + a'
+		y = b * t + b'
+		z = c * t + c'
+	+) 3 phần tử đầu của getVector là a, b, c (vector chỉ phương)
+	+) 3 phần tử cuối của getVector là a', b', c' (tọa độ mà đường thẳng đó đi qua)
+- Sau khi có các mặt phẳng và các đường thẳng => viết hàm xác định xem đường thẳng đó có cắt mặt phẳng trong biên của mặt phẳng đó hay không
+(trả về kiểu bool). Lưu ý, nếu đã cắt 1 mặt phẳng của vật thể đó rồi thì break vòng lặp rồi xét camera khác luôn do điểm đó đã không thể nhìn
+bởi camera hiện tại. (viết nháp thay lần lượt x, y, z vào mặt phẳng tọa độ rồi đưa ra công thức nghiệm theo các tham số A, B, C, D, a, b, c, ...
+=> so sánh với các đầu mút, do đề bài chỉ cho vật thẳng là hình hộp nên chỉ có 2 loại mặt phẳng
+	+) vuông góc với sàn: ****result = (bottom.z < z < top.z) && (bottom1.x < x < bottom2.x) && (bottom1.y < y < bottom2.y)******
+	+) song song với sàn: đúng khi bình phương khoảng cách từ giao điểm đến trọng tâm < (bình phương đường chéo / 4)
+
+- Hàm tính bình phương khoảng cách được viết trong class Coordinate dòng 73 -> 80. Đưa về dạng bình phương do có thể bị làm tròn khi khai căn dẫn đến không chính xác.
+Đầu vào là 1 biến dạng Coordinate. Ví dụ: bình phương khoảng cách từ A -> B = A.getDistances(B)
+
+- Góc nhìn của camera đã được set sẵn nên bỏ qua.
+	+) Để xác định xem tọa độ đó có nằm trong góc nhìn của camera không. Ta xét hình chiếu tọa độ đó lên trần nhà sau đó tìm góc tạo bởi đường thẳng nối camera với
+	tọa độ đó với mặt phẳng phần giác của camera. Ta tính tan(x - y) trong đó x là góc tạo bởi phân giác với Oyz, y là góc tạo bởi đường thẳng cần tìm với Oyz
+	+) tan(x - y) = (tan(x) - tan(y)) / (1 + tan(x) * tan(y)). tan(x) tính bởi x đã được set từ trước, còn tan(y) = x/y.
+	+) tọa độ nằm trong góc nhìn <=> -tan(W) <= tan(x - y) <= tan(W) với W là góc trông của camera, x là hướng nhìn của camera được hiểu là góc tạo bởi phân giác của
+	camera và mặt phẳng Oyz
+
+Conclusion: Khi thỏa mãn cả 3 điều kiện trên thì có thể xác định vật đó có thể nhìn được bởi camera[i] => set chuỗi seenByCameras trong class Coordinate:
+	=> seenByCameras[i] = '1'. Chuỗi này được hiểu là nếu tọa độ đó nhìn được từ camera 1, 4, 6 thì seenByCameras của tọa độ này sẽ = "100101"
+
+=> Khi vẽ hình, mỗi khi chọn hiển thị bởi camera nào đó, ta sẽ xác định được ID của camera đó => biết được tọa độ nào nhìn được hay không
