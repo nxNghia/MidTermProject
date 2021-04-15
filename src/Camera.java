@@ -5,16 +5,34 @@ public class Camera {
     private int id;
     private int x;
     private int y;
-    private float deepVision;   //tầm xa của camera
-    private float widthVision;  //độ rộng của vision
+    private Coordinate position;
+    private double deepVision;   //tầm xa của camera
+    private double widthVision;  //độ rộng của vision
+
+    private boolean inWall;// =  true thì camera trên tường,false thì trên trần nhà.
 
     private float angle;
-    public Camera(int x, int y, float deepVision, float widthVision, float angle) {
+
+    public Camera(int x, int y, int z, double deepVision, double widthVision, float angle, Room r) {
         ++CameraNumber;
         setX(x);
         setY(y);
         setDeepVision(deepVision);
         setID(CameraNumber);
+        Coordinate camPosition = Coordinate.getCoordinate(x, y, z, r.getCoordinates());
+        if(camPosition != null)
+        {
+            setPosition(camPosition);
+        }
+    }
+
+
+    public boolean isInWall() {
+        return inWall;
+    }
+
+    public void setInWall(boolean inWall) {
+        this.inWall = inWall;
     }
 
     public int getX() {
@@ -25,13 +43,13 @@ public class Camera {
         return y;
     }
 
-    public float getDeepVision() { return deepVision; }
+    public double getDeepVision() { return deepVision; }
 
     public int getID() {
         return id;
     }
 
-    public float getWidthVision() { return widthVision; }
+    public double getWidthVision() { return widthVision; }
 
     public float getAngle() { return angle; }
 
@@ -47,10 +65,15 @@ public class Camera {
         this.y = y;
     }
 
-    public void setDeepVision(float deepVision) {
+    public void setDeepVision(double deepVision) {
         this.deepVision = deepVision;
     }
-
+    public Coordinate getPosition() {
+        return position;
+    }
+    public void setPosition(Coordinate position) {
+        this.position = position;
+    }
     public static Camera findCamera(int x, int y, ArrayList<Camera> cameras)    //tìm camera theo x, y trong cameras
     {
         for (Camera c : cameras)
