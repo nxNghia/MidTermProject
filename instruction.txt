@@ -30,6 +30,9 @@ bởi camera hiện tại. (viết nháp thay lần lượt x, y, z vào mặt p
 Đầu vào là 1 biến dạng Coordinate. Ví dụ: bình phương khoảng cách từ A -> B = A.getDistances(B)
 
 - Góc nhìn của camera đã được set sẵn nên bỏ qua.
+
+
+
 	+) Để xác định xem tọa độ đó có nằm trong góc nhìn của camera không. Ta xét hình chiếu tọa độ đó lên trần nhà sau đó tìm góc tạo bởi đường thẳng nối camera với
 	tọa độ đó với mặt phẳng phần giác của camera. Ta tính tan(x - y) trong đó x là góc tạo bởi phân giác với Oyz, y là góc tạo bởi đường thẳng cần tìm với Oyz
 	+) tan(x - y) = (tan(x) - tan(y)) / (1 + tan(x) * tan(y)). tan(x) tính bởi x đã được set từ trước, còn tan(y) = x/y.
