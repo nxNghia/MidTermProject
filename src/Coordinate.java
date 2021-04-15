@@ -70,7 +70,7 @@ public class Coordinate {
     }
 
     //Lấy bình phương khoảng cách từ this đến destination
-    public int getDistances(Coordinate destination)
+    public double getDistances(Coordinate destination)
     {
         int _x = (destination.getX() - getX()) * (destination.getX() - getX());
         int _y = (destination.getY() - getY()) * (destination.getY() - getY());
@@ -98,25 +98,133 @@ public class Coordinate {
         c1.setSeenByCameras(c2.getSeenByCameras());
         c2.setSeenByCameras(tmp2);
     }
+    public int cutFace(ArrayList<Integer> line, ArrayList<Integer> surface)
+    {
+        float k = (surface.get(3)-surface.get(0)*line.get(0)-surface.get(1)*line.get(1)
+                -surface.get(2)*line.get(2)/(surface.get(0)*line.get(3)+surface.get(1)*line.get(4)
+                +surface.get(2)*line.get(5)));
+        float x = k*line.get(3)+line.get(0);
+        float y = k*line.get(4)+line.get(1);
+        float z = k*line.get(5)+line.get(2);
+        float d1,d2;
+        if(surface.get(6)==surface.get(9))
+        {
+            d1=(surface.get(7)-surface.get(4))*(y-surface.get(5))-(x-surface.get(4))*(surface.get(8)-surface.get(5));
+            d2=(surface.get(10)-surface.get(13))*(y-surface.get(14))-(x-surface.get(13))*(surface.get(11)-surface.get(14));
+            if(d1*d2<0)
+            {
+                d1=(surface.get(10)-surface.get(7))*(y-surface.get(8))-(x-surface.get(7))*(surface.get(11)-surface.get(8));
+                d2=(surface.get(13)-surface.get(4))*(y-surface.get(5))-(x-surface.get(4))*(surface.get(14)-surface.get(5));
+                if(d1*d2<0)
+                    return 1;
+                else return 0;
+            }
+            else
+                return 0;
+        }
+        else
+            if(surface.get(5)==surface.get(8))
+            {
+                d1=(surface.get(7)-surface.get(4))*(z-surface.get(6))-(x-surface.get(4))*(surface.get(9)-surface.get(6));
+                d2=(surface.get(10)-surface.get(13))*(z-surface.get(15))-(x-surface.get(13))*(surface.get(12)-surface.get(15));
+                if(d1*d2<0)
+                {
+                    d1=(surface.get(10)-surface.get(7))*(z-surface.get(9))-(x-surface.get(7))*(surface.get(12)-surface.get(9));
+                    d2=(surface.get(13)-surface.get(4))*(z-surface.get(6))-(x-surface.get(4))*(surface.get(15)-surface.get(6));
+                    if(d1*d2<0)
+                        return 1;
+                    else return 0;
+                }
+                else
+                    return 0;
+            }
+            else
+            {
+                d1=(surface.get(8)-surface.get(5))*(z-surface.get(6))-(y-surface.get(5))*(surface.get(9)-surface.get(6));
+                d2=(surface.get(11)-surface.get(14))*(z-surface.get(15))-(y-surface.get(14))*(surface.get(12)-surface.get(15));
+                if(d1*d2<0)
+                {
+                    d1=(surface.get(11)-surface.get(8))*(z-surface.get(9))-(y-surface.get(8))*(surface.get(12)-surface.get(9));
+                    d2=(surface.get(14)-surface.get(5))*(z-surface.get(6))-(y-surface.get(5))*(surface.get(15)-surface.get(6));
+                    if(d1*d2<0)
+                        return 1;
+                    else return 0;
+                }
+                else
+                    return 0;
+            }
+    }
+    public boolean inVision(Camera camera){
+        double deltaR;
+        double deltaH;
+        double maxR;
+        if(camera.isInWall())
+        {
+            deltaR=Math.abs(camera.getPosition().getZ()-this.z);
+            deltaH=Math.sqrt((camera.getPosition().getX()-this.x)*(camera.getPosition().getX()-this.x)*
+                    +(camera.getPosition().getY()-this.y)*(camera.getPosition().getY()-this.y));
+            maxR=deltaH*Math.tan(camera.getWidthVision());
+
+        }
+        else
+        {
+            deltaR=Math.sqrt((camera.getPosition().getX()-this.x)*(camera.getPosition().getX()-this.x)*
+                    +(camera.getPosition().getY()-this.y)*(camera.getPosition().getY()-this.y));
+            deltaH=Math.abs(camera.getPosition().getZ()-this.z);
+            maxR=deltaH*Math.tan(camera.getWidthVision());
+        }
+        if(maxR>=deltaR)
+        {
+            return true;
+        }
+        return false;
+    }
+
 
     //sau hàm này xác định được chuỗi seenByCamera của từng coordinate
     public void beSeen(ArrayList<Camera> cameras, ArrayList<Obstacle> obstacles)
     {
         for (Camera camera : cameras)
         {
-            for (Obstacle obstacle : obstacles)
+            int id = camera.getID();
+            if(inVision(camera)) //xét xem có trong góc nhìn camera không
             {
-                if(obstacle.getTop1().getZ() > getZ())  //chỉ xét những điểm nào nằm dưới chiều cao của vật
+                if(getDistances(camera.getPosition())<=(camera.getDeepVision()*camera.getDeepVision())) //xét khoảng cách
                 {
-                    //do something
-                    //nhìn thấy khi:
-                    //+) đường thẳng không cắt qua bề mặt nào
-                    //+) bình phương khoảng cách nhỏ hơn bình phương deepVision
-                    //+) gọi điểm hiện tại là a; thỏa mãn khi góc tạo bởi aOy nhỏ hơn góc tạp bởi phân giác camera vs Oy
-                    //nếu giữa điểm this và camera thứ n bị gián đoạn bởi vật thể => set seenByCamera[n] = 0
-                    //ngược lại bẳng 1
+                    int check =1;
+                    for(Obstacle obstacle : obstacles )
+                    {
+                        if(obstacle.getTop1().getZ() > getZ())
+                        {
+                            ArrayList<Integer> line = getVector(camera.getPosition());
+                            ArrayList<Integer> face1 = obstacle.getSurface1();
+                            ArrayList<Integer> face2 = obstacle.getSurface2();
+                            ArrayList<Integer> face3 = obstacle.getSurface3();
+                            ArrayList<Integer> face4 = obstacle.getSurface4();
+                            ArrayList<Integer> face5 = obstacle.getSurface5();
+                            if(cutFace(line,face1)+cutFace(line,face2)+cutFace(line,face3)+cutFace(line,face4)+cutFace(line,face5)==1)
+                            {
+                                check=0;
+                                break;
+                            }
+                        }
+                    }
+                    if(check==1)
+                    {
+                        seenByCameras.setCharAt(id-1, '1');
+                    }
                 }
             }
         }
+    }
+
+    public static Coordinate getCoordinate(int x, int y, int z, Coordinate[] point)
+    {
+        for(Coordinate p : point)
+        {
+            if(p.getX()==x && p.getY()==y && p.getZ() == z)
+                return p;
+        }
+        return null;
     }
 }
