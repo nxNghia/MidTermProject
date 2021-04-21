@@ -12,9 +12,7 @@ public class Obstacle {
     private Coordinate top4;
 
     private ArrayList<Integer> surface1;
-
     private ArrayList<Integer> surface2;
-
     private ArrayList<Integer> surface3;
     private ArrayList<Integer> surface4;
     private ArrayList<Integer> surface5;
