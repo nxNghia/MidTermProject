@@ -11,6 +11,15 @@ public class Camera {
 
     private boolean inWall;// =  true thì camera trên tường,false thì trên trần nhà.
 
+    public ArrayList<Obstacle> getCanseeObstacle() {
+        return canseeObstacle;
+    }
+
+    public void setCanseeObstacle(ArrayList<Obstacle> canseeObstacle) {
+        this.canseeObstacle = canseeObstacle;
+    }
+
+    private ArrayList<Obstacle> canseeObstacle = new ArrayList<Obstacle>();
     private float angle;
 
     public Camera(int x, int y, int z, double deepVision, double widthVision, float angle, Room r) {

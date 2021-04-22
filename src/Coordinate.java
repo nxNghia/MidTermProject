@@ -215,6 +215,15 @@ public class Coordinate {
         return false;
     }
 
+    public boolean inObstacle(Obstacle obstacle)
+    {
+        if(x>=obstacle.getBottom1().getX()&&x<=obstacle.getBottom4().getX())
+            if(y>=obstacle.getBottom1().getY()&&y<=obstacle.getBottom2().getY())
+                if(z>=obstacle.getBottom1().getZ()&&z<=obstacle.getTop1().getZ())
+                    return true;
+        return false;
+    }
+
 
     //sau hàm này xác định được chuỗi seenByCamera của từng coordinate
     public void beSeen(ArrayList<Camera> cameras, ArrayList<Obstacle> obstacles)
@@ -229,6 +238,36 @@ public class Coordinate {
                     int check =1;
                     for(Obstacle obstacle : obstacles )
                     {
+                        if(inObstacle(obstacle))
+                        {
+                            check=0;
+                            int check1 =1;
+                            for(Obstacle obstacle1 : obstacles)
+                            {
+                                if(!obstacle1.equals(obstacle))
+                                {
+                                    ArrayList<Integer> line = getVector(camera.getPosition());
+                                    ArrayList<Integer> face1 = obstacle1.getSurface1();
+                                    ArrayList<Integer> face2 = obstacle1.getSurface2();
+                                    ArrayList<Integer> face3 = obstacle1.getSurface3();
+                                    ArrayList<Integer> face4 = obstacle1.getSurface4();
+                                    ArrayList<Integer> face5 = obstacle1.getSurface5();
+                                    if(throughFace(line,face1)+throughFace(line,face2)+throughFace(line,face3)+throughFace(line,face4)
+                                            +throughFace(line,face5)!=0)
+                                    {
+                                        check1=0;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(check1==1)
+                            {
+                                if(!camera.getCanseeObstacle().contains(obstacle))
+                                    camera.getCanseeObstacle().add(obstacle);
+                            }
+                            break;
+                        }
+                        else
                         if(obstacle.getTop1().getZ() > getZ())
                         {
                             ArrayList<Integer> line = getVector(camera.getPosition());
