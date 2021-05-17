@@ -6,19 +6,20 @@ public class Obstacle {
     private Coordinate bottom3;
     private Coordinate bottom4;
 
-    private Coordinate top1;
     private Coordinate top2;
+    private Coordinate top1;
     private Coordinate top3;
     private Coordinate top4;
 
     private ArrayList<Integer> surface1;
+
     private ArrayList<Integer> surface2;
+
     private ArrayList<Integer> surface3;
     private ArrayList<Integer> surface4;
     private ArrayList<Integer> surface5;
     private String color;
     private int height;
-
     public Obstacle(int[] x, int[] y, int[] z, int height, String color)
     {
         //Tìm trả về Coordinate theo tọa độ (x[0], y[0], z[0]), ...
@@ -35,6 +36,7 @@ public class Obstacle {
     //Trả về mặt phẳng đi qua 4 tọa độ c1, c2, c3, c4
     //ax + by + cz = d
     //12 giá trị sau là biên của mặt phẳng
+
     private ArrayList<Integer> getSurface(Coordinate c1, Coordinate c2, Coordinate c3, Coordinate c4)
     {
         ArrayList<Integer> result = new ArrayList<>();
@@ -73,6 +75,25 @@ public class Obstacle {
         result.add(c4.getZ());
 
         return result;
+    }
+    public ArrayList<Integer> getSurface1() {
+        return surface1;
+    }
+
+    public ArrayList<Integer> getSurface2() {
+        return surface2;
+    }
+
+    public ArrayList<Integer> getSurface3() {
+        return surface3;
+    }
+
+    public ArrayList<Integer> getSurface4() {
+        return surface4;
+    }
+
+    public ArrayList<Integer> getSurface5() {
+        return surface5;
     }
 
     public Coordinate getTop1() {
