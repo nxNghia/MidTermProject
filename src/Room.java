@@ -79,11 +79,7 @@ public class Room {
             x = sn.nextInt();
             y = sn.nextInt();
 
-<<<<<<< HEAD
-            cameras.add(new Camera(x, y, deepVision, widthVision));
-=======
             cameras.add(new Camera(x, y, getHeight(), deepVision, widthVision, angle, this));
->>>>>>> 15a5ccec81935bc45360cb476078a357c541b742
         }
     }
 
@@ -107,12 +103,8 @@ public class Room {
             {
                 if(Camera.findCamera(i, j, cameras) == null)
                 {
-<<<<<<< HEAD
-                    Camera tmp = new Camera(i, j, cameras.get(0).getDeepVision(), cameras.get(0).getWidthVision());
-=======
                     Camera tmp = new Camera(i, j, getHeight(), cameras.get(0).getDeepVision(), cameras.get(0).getWidthVision(),
                             cameras.get(0).getAngle(), this);
->>>>>>> 15a5ccec81935bc45360cb476078a357c541b742
                     cameras2.add(tmp);
                     cameras.add(tmp);
                 }

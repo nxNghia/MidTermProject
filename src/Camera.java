@@ -11,13 +11,9 @@ public class Camera {
 
     private boolean inWall;// =  true thì camera trên tường,false thì trên trần nhà.
 
-<<<<<<< HEAD
-    public Camera(int x, int y, float deepVision, float widthVision) {
-=======
     private float angle;
 
     public Camera(int x, int y, int z, double deepVision, double widthVision, float angle, Room r) {
->>>>>>> 15a5ccec81935bc45360cb476078a357c541b742
         ++CameraNumber;
         setX(x);
         setY(y);
@@ -54,6 +50,8 @@ public class Camera {
     }
 
     public double getWidthVision() { return widthVision; }
+
+    public float getAngle() { return angle; }
 
     public void setID(int id) {
         this.id = id;

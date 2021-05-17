@@ -101,13 +101,13 @@ public class Coordinate {
     public int cutFace(ArrayList<Integer> line, ArrayList<Integer> surface)
     {
         float k = (surface.get(3)-surface.get(0)*line.get(0)-surface.get(1)*line.get(1)
-                -surface.get(2)*line.get(2)/(surface.get(0)*line.get(3)+surface.get(1)*line.get(4)
-                +surface.get(2)*line.get(5)));
+                -surface.get(2)*line.get(2)/ (surface.get(0)*line.get(3)+surface.get(1)*line.get(4)
+                +surface.get(2)*line.get(5)) );
         float x = k*line.get(3)+line.get(0);
         float y = k*line.get(4)+line.get(1);
         float z = k*line.get(5)+line.get(2);
         float d1,d2;
-        if(surface.get(6)==surface.get(9))
+        if(surface.get(6).equals(surface.get(9)))
         {
             d1=(surface.get(7)-surface.get(4))*(y-surface.get(5))-(x-surface.get(4))*(surface.get(8)-surface.get(5));
             d2=(surface.get(10)-surface.get(13))*(y-surface.get(14))-(x-surface.get(13))*(surface.get(11)-surface.get(14));
