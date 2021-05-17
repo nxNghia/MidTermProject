@@ -162,6 +162,8 @@ public class Room {
         int group = 0;
         int max = 0;
 
+
+        //cần viết lại tránh remove trong list
         while(group <= limit && max != copy_coordiantes.size())
         {
             for (Coordinate coordinate : copy_coordiantes) {
