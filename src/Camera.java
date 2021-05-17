@@ -8,8 +8,7 @@ public class Camera {
     private float deepVision;   //tầm xa của camera
     private float widthVision;  //độ rộng của vision
 
-    private float angle;
-    public Camera(int x, int y, float deepVision, float widthVision, float angle) {
+    public Camera(int x, int y, float deepVision, float widthVision) {
         ++CameraNumber;
         setX(x);
         setY(y);
@@ -32,8 +31,6 @@ public class Camera {
     }
 
     public float getWidthVision() { return widthVision; }
-
-    public float getAngle() { return angle; }
 
     public void setID(int id) {
         this.id = id;

@@ -74,7 +74,7 @@ public class Room {
             x = sn.nextInt();
             y = sn.nextInt();
 
-            cameras.add(new Camera(x, y, deepVision, widthVision, angle));
+            cameras.add(new Camera(x, y, deepVision, widthVision));
         }
     }
 
@@ -97,8 +97,7 @@ public class Room {
             {
                 if(Camera.findCamera(i, j, cameras) == null)
                 {
-                    Camera tmp = new Camera(i, j, cameras.get(0).getDeepVision(), cameras.get(0).getWidthVision(),
-                            cameras.get(0).getAngle());
+                    Camera tmp = new Camera(i, j, cameras.get(0).getDeepVision(), cameras.get(0).getWidthVision());
                     cameras2.add(tmp);
                     cameras.add(tmp);
                 }
