@@ -159,48 +159,49 @@ public class Room {
         //Tính tổng số tọa độ mà mỗi camera nhìn được
         List<Integer> sum = new ArrayList<Integer>();
         for (int i = 0; i < coordinates.length; ++i)
-            sum.add(0);
-
-        int group = 0;
-        int max = 0;
-
-
-        //cần viết lại tránh remove trong list
-        while(group <= limit && max != copy_coordiantes.size())
         {
-            for (Coordinate coordinate : copy_coordiantes) {
-                for (int j = 0; j < coordinate.getSeenByCameras().length(); ++j) {
-                    int tmp = sum.get(j);
-                    tmp += coordinate.getSeenByCameras().charAt(j);
-                    sum.set(j, tmp);
+            int count = 0;
+            for (Coordinate coordinate : copy_coordiantes)
+            {
+                if(coordinate.getSeenByCameras().charAt(i) == '1') {
+                    ++count;
                 }
             }
+            sum.add(count);
+        }
 
+        int group = 0;
+
+        //cần viết lại tránh remove trong list
+        while(group <= limit && copy_coordiantes.size() != 0 && Collections.max(sum) != 0)
+        {
             //Tìm được nhóm mới
-            if(Collections.max(sum) != 0)
+            ++group;
+
+            for (Coordinate coordinate : copy_coordiantes)
             {
-                ++group;
-
-                copy_coordiantes.removeIf
-                        (coordinate -> coordinate.getSeenByCameras().charAt(sum.indexOf(Collections.max(sum))) == '1');
-
-                for (Coordinate coordinate : copy_coordiantes)
+                if(coordinate.getSeenByCameras().charAt(sum.indexOf(Collections.max(sum))) == '1')
                 {
-                    if(coordinate.getSeenByCameras().charAt(sum.indexOf(Collections.max(sum))) == '1')
+                    //sửa lại dãy sum
+                    for (int i = 0; i < coordinate.getSeenByCameras().length(); ++i)
                     {
-                        copy_coordiantes.remove(coordinate);
-
-                        //nếu camera có ID bằng số thứ tự của cột max của dãy sum => camera cần phải đặt thêm
-                        if (Camera.findCamera
-                                (sum.indexOf(Collections.max(sum)) + 1, cameras2) != null)
+                        if(coordinate.getSeenByCameras().charAt(i) == '1')
                         {
-                            System.out.println("Lap them camera o toa do: x = " + coordinate.getX()
-                                    + ", y = " + coordinate.getY());
+                            int tmp = sum.get(i);
+                            --tmp;
+                            sum.set(i, tmp);
                         }
                     }
+                    
+                    //Nếu ID của camera nằm trong nhóm cameras2 => đây là camera mới thêm vào
+                    if (Camera.findCamera
+                            (sum.indexOf(Collections.max(sum)) + 1, cameras2) != null)
+                    {
+                        System.out.println("Lap them camera o toa do: x = " + coordinate.getX()
+                                + ", y = " + coordinate.getY());
+                    }
+                    copy_coordiantes.remove(coordinate);
                 }
-            }else{
-                break;
             }
         }
 
