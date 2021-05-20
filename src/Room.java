@@ -47,7 +47,11 @@ public class Room {
         this.numberCameras = numberCameras;
     }
 
-    public Room(int length, int width, int height, int numberCameras) {
+    public void setNumberObstacles(int numberObstacles) {
+        this.numberObstacles = numberObstacles;
+    }
+
+    public Room(int length, int width, int height, int numberCameras, int numberObstacles) {
         //test git pull
         //test git pull again
         int index = 0;
@@ -55,6 +59,7 @@ public class Room {
         setLength(length);
         setHeight(height);
         setNumberCameras(numberCameras);
+        setNumberObstacles(numberObstacles);
 
         coordinates = new Coordinate[length * width * height];
 
@@ -83,6 +88,16 @@ public class Room {
 
             cameras.add(new Camera(x, y, getHeight(), deepVision, widthVision, angle, this));
         }
+    }
+
+    public void obstaclesPlacement(Coordinate bottom1, Coordinate bottom2, Coordinate bottom3, Coordinate bottom4, int height)
+    {
+        Coordinate top1 = Coordinate.getCoordinate(bottom1.getX(), bottom1.getY(), bottom1.getZ() + height, getCoordinates());
+        Coordinate top2 = Coordinate.getCoordinate(bottom2.getX(), bottom2.getY(), bottom2.getZ() + height, getCoordinates());
+        Coordinate top3 = Coordinate.getCoordinate(bottom3.getX(), bottom3.getY(), bottom3.getZ() + height, getCoordinates());
+        Coordinate top4 = Coordinate.getCoordinate(bottom4.getX(), bottom4.getY(), bottom4.getZ() + height, getCoordinates());
+
+//        obstacles.add(new Obstacle());
     }
 
     public void caculateShadow()
@@ -192,7 +207,7 @@ public class Room {
                             sum.set(i, tmp);
                         }
                     }
-                    
+
                     //Nếu ID của camera nằm trong nhóm cameras2 => đây là camera mới thêm vào
                     if (Camera.findCamera
                             (sum.indexOf(Collections.max(sum)) + 1, cameras2) != null)
