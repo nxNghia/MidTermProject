@@ -70,7 +70,7 @@ public class Room {
         }
     }
 
-    public void camerasPlacement(float deepVision, float widthVision, float angle) {
+    public void camerasPlacement(double deepVision, double widthVision,double lengthVision, float angle) {
         int x;
         int y;
 
@@ -81,7 +81,7 @@ public class Room {
             x = sn.nextInt();
             y = sn.nextInt();
 
-            cameras.add(new Camera(x, y, getHeight(), deepVision, widthVision, angle, this));
+            cameras.add(new Camera(x, y, getHeight(), deepVision, widthVision, lengthVision,angle, this));
         }
     }
 
@@ -105,7 +105,7 @@ public class Room {
             if(Camera.findCamera(i, 0, cameras) == null)
             {
                 Camera camera = new Camera(i, 0, getHeight(), cameras.get(0).getDeepVision(),
-                        cameras.get(0).getWidthVision(), cameras.get(0).getAngle(), this);
+                        cameras.get(0).getWidthVision(),cameras.get(0).getLengthVision(), cameras.get(0).getAngle(), this);
                 cameras.add(camera);
                 cameras2.add(camera);
             }
@@ -113,7 +113,7 @@ public class Room {
             if(Camera.findCamera(i, getLength(), cameras) == null)
             {
                 Camera camera = new Camera(i, getLength(), getHeight(), cameras.get(0).getDeepVision(),
-                        cameras.get(0).getWidthVision(), cameras.get(0).getAngle(), this);
+                        cameras.get(0).getWidthVision(),cameras.get(0).getLengthVision(), cameras.get(0).getAngle(), this);
                 cameras.add(camera);
                 cameras2.add(camera);
             }
@@ -124,7 +124,7 @@ public class Room {
             if(Camera.findCamera(0, i, cameras) == null)
             {
                 Camera camera = new Camera(0, i, getHeight(), cameras.get(0).getDeepVision(),
-                        cameras.get(0).getWidthVision(), cameras.get(0).getAngle(), this);
+                        cameras.get(0).getWidthVision(), cameras.get(0).getLengthVision(),cameras.get(0).getAngle(), this);
                 cameras.add(camera);
                 cameras2.add(camera);
             }
@@ -132,7 +132,7 @@ public class Room {
             if(Camera.findCamera(getWidth(), i, cameras) == null)
             {
                 Camera camera = new Camera(getWidth(), i, getHeight(), cameras.get(0).getDeepVision(),
-                        cameras.get(0).getWidthVision(), cameras.get(0).getAngle(), this);
+                        cameras.get(0).getWidthVision(), cameras.get(0).getLengthVision(),cameras.get(0).getAngle(), this);
                 cameras.add(camera);
                 cameras2.add(camera);
             }
@@ -218,5 +218,50 @@ public class Room {
         }
 
         return result;
+    }
+    public double RateOfSighting()
+    {
+        ArrayList<Coordinate> insideObstacle = new ArrayList<>();
+        int count = 0;
+        for(Coordinate coordinate: coordinates)
+        {
+            for(Obstacle obstacle: obstacles)
+            {
+                if(coordinate.getX()>=obstacle.getBottom1().get(0)&&coordinate.getX()<=obstacle.getBottom2().get(0)
+                &&coordinate.getY()>=obstacle.getBottom2().get(1)&&coordinate.getY()<=obstacle.getBottom3().get(1)
+                &&coordinate.getZ()>=obstacle.getBottom1().get(2)&&coordinate.getZ()<=obstacle.getTop1().get(2))
+                {
+                    insideObstacle.add(coordinate);
+                    break;
+                }
+                else
+                {
+                    coordinate.beSeen(cameras,obstacles);
+                    if(coordinate.isCanSee())
+                        count++;
+                }
+            }
+        }
+        int qtyCoordinateOutside = length*width*height - insideObstacle.size();
+        double result  = count/qtyCoordinateOutside;
+        return result;
+    }
+    public void addCamera(Camera camera)
+    {
+        if(this.cameras==null)
+        {
+            ArrayList<Camera> temp = new ArrayList<Camera>();
+            this.cameras=temp;
+        }
+        this.cameras.add(camera);
+    }
+    public void addObstacle(Obstacle obstacle)
+    {
+        if(this.obstacles==null)
+        {
+            ArrayList<Obstacle> temp = new ArrayList<Obstacle>();
+            this.obstacles=temp;
+        }
+        this.obstacles.add(obstacle);
     }
 }

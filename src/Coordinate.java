@@ -6,6 +6,8 @@ public class Coordinate {
     private int z;
     private StringBuilder seenByCameras;    //cho biết điểm này có thể nhìn thấy bởi camera nào
 
+    private boolean canSee; // điểm có thể nhìn thấy không
+
     public Coordinate(int x, int y, int z, int length, int width) {
         setX(x);
         setY(y);
@@ -25,6 +27,14 @@ public class Coordinate {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public boolean isCanSee() {
+        return canSee;
+    }
+
+    public void setCanSee(boolean canSee) {
+        this.canSee = canSee;
     }
 
     public void setZ(int z) {
@@ -55,29 +65,27 @@ public class Coordinate {
     //x = a' * t + a
     //y = b' * t + b
     //z = c' * t + c
-    public ArrayList<Integer> getVector(Coordinate destination)
+    public ArrayList<Double> getVector(double x, double y ,double z)
     {
-        ArrayList<Integer> result = new ArrayList<>();
-
-        result.add(destination.getX() - getX());    //a'
-        result.add(destination.getY() - getY());    //b'
-        result.add(destination.getZ() - getZ());    //c'
-        result.add(destination.getX());             //a
-        result.add(destination.getY());             //b
-        result.add(destination.getZ());             //c
-
+        ArrayList<Double> result = new ArrayList<>();
+        result.add(x - getX());    //a'
+        result.add(y - getY());    //b'
+        result.add(z - getZ());    //c'
+        result.add(x);             //a
+        result.add(y);             //b
+        result.add(z);             //c
         return result;
     }
 
     //Lấy bình phương khoảng cách từ this đến destination
-    public double getDistances(Coordinate destination)
-    {
-        int _x = (destination.getX() - getX()) * (destination.getX() - getX());
-        int _y = (destination.getY() - getY()) * (destination.getY() - getY());
-        int _z = (destination.getZ() - getZ()) * (destination.getZ() - getZ());
-
-        return _x + _y + _z;
-    }
+//    public double getDistances(Coordinate destination)
+//    {
+//        int _x = (destination.getX() - getX()) * (destination.getX() - getX());
+//        int _y = (destination.getY() - getY()) * (destination.getY() - getY());
+//        int _z = (destination.getZ() - getZ()) * (destination.getZ() - getZ());
+//
+//        return _x + _y + _z;
+//    }
 
     //hàm swap giá trị của hai biến Coordinate
     public static void swap(Coordinate c1, Coordinate c2)
@@ -113,9 +121,9 @@ public class Coordinate {
         double angle = Math.acos(cosXOY);
         return angle;
     }
-    public int throughFace(ArrayList<Integer> line, ArrayList<Integer> surface)
+    public int throughFace(ArrayList<Double> line, ArrayList<Double> surface)
     {
-        double t = (double) (surface.get(3)-surface.get(0)*line.get(0)-surface.get(1)*line.get(1)
+        double t = (surface.get(3)-surface.get(0)*line.get(0)-surface.get(1)*line.get(1)
                 -surface.get(2)*line.get(2)/(surface.get(0)*line.get(3)+surface.get(1)*line.get(4)
                 +surface.get(2)*line.get(5)));
         double xO = t*line.get(3)+line.get(0);
@@ -190,28 +198,57 @@ public class Coordinate {
 //                    return 0;
 //            }
 //    }
-    public boolean inVision(Camera camera){
-        double deltaR;
-        double deltaH;
-        double maxR;
-        if(camera.isInWall())
+//    public boolean inVision(Camera camera){
+//        double deltaR;
+//        double deltaH;
+//        double maxR;
+//        if(camera.isInWall())
+//        {
+//            deltaR=Math.abs(camera.getPosition().getZ()-this.z);
+//            deltaH=Math.sqrt((camera.getPosition().getX()-this.x)*(camera.getPosition().getX()-this.x)*
+//                    +(camera.getPosition().getY()-this.y)*(camera.getPosition().getY()-this.y));
+//
+//        }
+//        else
+//        {
+//            deltaR=Math.sqrt((camera.getPosition().getX()-this.x)*(camera.getPosition().getX()-this.x)*
+//                    +(camera.getPosition().getY()-this.y)*(camera.getPosition().getY()-this.y));
+//            deltaH=Math.abs(camera.getPosition().getZ()-this.z);
+//        }
+//        maxR=deltaH*Math.tan(camera.getWidthVision());
+//        if(maxR>=deltaR)
+//        {
+//            return true;
+//        }
+//        return false;
+//    }
+    public boolean inVision(Camera camera)
+    {
+        double deltaAlpha = 0;
+        double deltaBeta = 0;
+        if(camera.getWall()==2||camera.getWall()==4)
         {
-            deltaR=Math.abs(camera.getPosition().getZ()-this.z);
-            deltaH=Math.sqrt((camera.getPosition().getX()-this.x)*(camera.getPosition().getX()-this.x)*
-                    +(camera.getPosition().getY()-this.y)*(camera.getPosition().getY()-this.y));
-
+            deltaAlpha = angleXOY(this.getX(),this.getY(),camera.getZ(),this.getX(),camera.getY(),camera.getZ(),
+                    camera.getX(),camera.getY(),camera.getZ());
+            deltaBeta = angleXOY(this.getX(),camera.getY(),this.getZ(),this.getX(),camera.getY(),camera.getZ(),
+                    camera.getX(),camera.getY(),camera.getZ());
         }
-        else
+        if(camera.getWall()==1||camera.getWall()==3)
         {
-            deltaR=Math.sqrt((camera.getPosition().getX()-this.x)*(camera.getPosition().getX()-this.x)*
-                    +(camera.getPosition().getY()-this.y)*(camera.getPosition().getY()-this.y));
-            deltaH=Math.abs(camera.getPosition().getZ()-this.z);
+            deltaAlpha = angleXOY(this.getX(),this.getY(),camera.getZ(),camera.getX(),this.getY(),camera.getZ(),
+                    camera.getX(),camera.getY(),camera.getZ());
+            deltaBeta = angleXOY(camera.getX(),this.getY(),this.getZ(),camera.getX(),this.getY(),camera.getZ(),
+                    camera.getX(),camera.getY(),camera.getZ());
         }
-        maxR=deltaH*Math.tan(camera.getWidthVision());
-        if(maxR>=deltaR)
+        if(camera.getWall()==0)
         {
+            deltaAlpha = angleXOY(this.getX(),camera.getY(),this.getZ(),camera.getX(),camera.getY(),this.getZ(),
+                    camera.getX(),camera.getY(),camera.getZ());
+            deltaBeta = angleXOY(camera.getX(),this.getY(),this.getZ(),camera.getX(),camera.getY(),this.getZ(),
+                    camera.getX(),camera.getY(),camera.getZ());
+        }
+        if(deltaAlpha<=camera.getLengthVision()&&deltaBeta<=camera.getWidthVision())
             return true;
-        }
         return false;
     }
 
@@ -233,32 +270,32 @@ public class Coordinate {
             int id = camera.getID();
             if(inVision(camera)) //xét xem có trong góc nhìn camera không
             {
-                if(getDistances(camera.getPosition())<=(camera.getDeepVision()*camera.getDeepVision())) //xét khoảng cách
+                int check =1;
+                for(Obstacle obstacle : obstacles )
                 {
-                    int check =1;
-                    for(Obstacle obstacle : obstacles )
+                    if(obstacle.getTop1().get(2) > getZ())
                     {
-                        if(obstacle.getTop1().getZ() > getZ())
+                        ArrayList<Double> line = getVector(camera.getX(),camera.getY(),camera.getZ());
+                        ArrayList<Double> face1 = obstacle.getSurface1();
+                        ArrayList<Double> face2 = obstacle.getSurface2();
+                        ArrayList<Double> face3 = obstacle.getSurface3();
+                        ArrayList<Double> face4 = obstacle.getSurface4();
+                        ArrayList<Double> face5 = obstacle.getSurface5();
+                        if(throughFace(line,face1)+throughFace(line,face2)+throughFace(line,face3)+throughFace(line,face4)
+                                +throughFace(line,face5)!=0)
                         {
-                            ArrayList<Integer> line = getVector(camera.getPosition());
-                            ArrayList<Integer> face1 = obstacle.getSurface1();
-                            ArrayList<Integer> face2 = obstacle.getSurface2();
-                            ArrayList<Integer> face3 = obstacle.getSurface3();
-                            ArrayList<Integer> face4 = obstacle.getSurface4();
-                            ArrayList<Integer> face5 = obstacle.getSurface5();
-                            if(throughFace(line,face1)+throughFace(line,face2)+throughFace(line,face3)+throughFace(line,face4)
-                                    +throughFace(line,face5)!=0)
-                            {
-                                check=0;
-                                break;
-                            }
+                            check=0;
+                            break;
                         }
                     }
-                    if(check==1)
-                    {
-                        seenByCameras.setCharAt(id-1, '1');
-                    }
                 }
+                if(check==1)
+                {
+                    setCanSee(true);
+                    seenByCameras.setCharAt(id-1, '1');
+                }
+                else
+                    setCanSee(false);
             }
         }
     }
