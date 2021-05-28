@@ -3,12 +3,12 @@ import java.util.ArrayList;
 public class Camera {
     private static int CameraNumber;    //số lượng camera
     private int id;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    private int z;
+    private double z;
 
-    private Coordinate position;
+//    private Coordinate position;
     private double deepVision;   //tầm xa của camera
     private double widthVision;  //độ rộng của vision
     private double lengthVision;  // độ dài của Vision
@@ -18,7 +18,7 @@ public class Camera {
     //= 0 thì ở trần, = 1 thì ở tường x = 0, = 2 thì ở tường y = 0, = 3 thì ở tường x = length,= 4 thì ở tường y = width
     private float angle;
 
-    public Camera(int x, int y, int z, double deepVision, double widthVision,double lengthVision, float angle, Room r) {
+    public Camera(double x, double y, double z, double deepVision, double widthVision,double lengthVision, float angle, Room r) {
         ++CameraNumber;
         setX(x);
         setY(y);
@@ -26,11 +26,11 @@ public class Camera {
         setDeepVision(deepVision);
         setLengthVision(lengthVision);
         setID(CameraNumber);
-        Coordinate camPosition = Coordinate.getCoordinate(x, y, z, r.getCoordinates());
-        if(camPosition != null)
-        {
-            setPosition(camPosition);
-        }
+//        Coordinate camPosition = Coordinate.getCoordinate(x, y, z, r.getCoordinates());
+//        if(camPosition != null)
+//        {
+//            setPosition(camPosition);
+//        }
         if(z==r.getHeight())
             setWall(0);
         else if(x==0)
@@ -43,11 +43,11 @@ public class Camera {
             setWall(4);
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
@@ -65,11 +65,11 @@ public class Camera {
         this.id = id;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -77,15 +77,15 @@ public class Camera {
         this.deepVision = deepVision;
     }
 
-    public Coordinate getPosition() {
-        return position;
-    }
+//    public Coordinate getPosition() {
+//        return position;
+//    }
+//
+//    public void setPosition(Coordinate position) {
+//        this.position = position;
+//    }
 
-    public void setPosition(Coordinate position) {
-        this.position = position;
-    }
-
-    public static Camera findCamera(int x, int y, ArrayList<Camera> cameras)    //tìm camera theo x, y trong cameras
+    public static Camera findCamera(int x, int y,ArrayList<Camera> cameras)    //tìm camera theo x, y trong cameras
     {
         for (Camera c : cameras)
         {
@@ -122,11 +122,11 @@ public class Camera {
         this.lengthVision = lengthVision;
     }
 
-    public int getZ() {
+    public double getZ() {
         return z;
     }
 
-    public void setZ(int z) {
+    public void setZ(double z) {
         this.z = z;
     }
 }
