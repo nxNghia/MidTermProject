@@ -12,7 +12,9 @@ public class Obstacle {
     private Coordinate top4;
 
     private ArrayList<Integer> surface1;
+
     private ArrayList<Integer> surface2;
+
     private ArrayList<Integer> surface3;
     private ArrayList<Integer> surface4;
     private ArrayList<Integer> surface5;
@@ -74,17 +76,6 @@ public class Obstacle {
 
         return result;
     }
-    public boolean equals(Obstacle obstacle)
-    {
-        if(this.bottom1.getX()==obstacle.getBottom1().getX()&&this.bottom1.getY()==obstacle.getBottom1().getY()
-                &&this.bottom1.getZ()==obstacle.getBottom1().getZ())
-            if(this.bottom3.getX()==obstacle.getBottom3().getX()&&this.bottom3.getY()==obstacle.getBottom3().getY()
-                        &&this.bottom3.getZ()==obstacle.getBottom3().getZ())
-                if(this.top1.getX()==obstacle.getTop1().getX()&&this.top1.getY()==obstacle.getTop1().getY()
-                            &&this.top1.getZ()==obstacle.getTop1().getZ())
-                    return true;
-        return false;
-    }
     public ArrayList<Integer> getSurface1() {
         return surface1;
     }
@@ -104,13 +95,6 @@ public class Obstacle {
     public ArrayList<Integer> getSurface5() {
         return surface5;
     }
-
-/*
-    public void draw()
-    {
-
-    }
-*/
 
     public Coordinate getTop1() {
         return top1;

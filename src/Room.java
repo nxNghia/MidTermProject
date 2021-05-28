@@ -48,6 +48,8 @@ public class Room {
     }
 
     public Room(int length, int width, int height, int numberCameras) {
+        //test git pull
+        //test git pull again
         int index = 0;
         setWidth(width);
         setLength(length);
@@ -68,7 +70,7 @@ public class Room {
         }
     }
 
-    public void camerasPlacement(float deepVision, float widthVision, float angle) {
+    public void camerasPlacement(double deepVision, double widthVision,double lengthVision, float angle) {
         int x;
         int y;
 
@@ -79,7 +81,7 @@ public class Room {
             x = sn.nextInt();
             y = sn.nextInt();
 
-            cameras.add(new Camera(x, y, getHeight(), deepVision, widthVision, angle, this));
+            cameras.add(new Camera(x, y, getHeight(), deepVision, widthVision, lengthVision,angle, this));
         }
     }
 
@@ -97,17 +99,42 @@ public class Room {
     public int caculateCamera(int limit, boolean reset)
     {
         ArrayList<Camera> cameras2 = new ArrayList<>(); //dùng để đánh dấu những camera sẽ thêm vào chỉ trong hàm này
+        //thêm camera trên tường tại những vị trí trống
+        for (int i = 0; i < getWidth(); ++i)
+        {
+            if(Camera.findCamera(i, 0, cameras) == null)
+            {
+                Camera camera = new Camera(i, 0, getHeight(), cameras.get(0).getDeepVision(),
+                        cameras.get(0).getWidthVision(),cameras.get(0).getLengthVision(), cameras.get(0).getAngle(), this);
+                cameras.add(camera);
+                cameras2.add(camera);
+            }
+
+            if(Camera.findCamera(i, getLength(), cameras) == null)
+            {
+                Camera camera = new Camera(i, getLength(), getHeight(), cameras.get(0).getDeepVision(),
+                        cameras.get(0).getWidthVision(),cameras.get(0).getLengthVision(), cameras.get(0).getAngle(), this);
+                cameras.add(camera);
+                cameras2.add(camera);
+            }
+        }
+
         for (int i = 0; i < getLength(); ++i)
         {
-            for (int j = 0; j < getWidth(); ++i)
+            if(Camera.findCamera(0, i, cameras) == null)
             {
-                if(Camera.findCamera(i, j, cameras) == null)
-                {
-                    Camera tmp = new Camera(i, j, getHeight(), cameras.get(0).getDeepVision(), cameras.get(0).getWidthVision(),
-                            cameras.get(0).getAngle(), this);
-                    cameras2.add(tmp);
-                    cameras.add(tmp);
-                }
+                Camera camera = new Camera(0, i, getHeight(), cameras.get(0).getDeepVision(),
+                        cameras.get(0).getWidthVision(), cameras.get(0).getLengthVision(),cameras.get(0).getAngle(), this);
+                cameras.add(camera);
+                cameras2.add(camera);
+            }
+
+            if(Camera.findCamera(getWidth(), i, cameras) == null)
+            {
+                Camera camera = new Camera(getWidth(), i, getHeight(), cameras.get(0).getDeepVision(),
+                        cameras.get(0).getWidthVision(), cameras.get(0).getLengthVision(),cameras.get(0).getAngle(), this);
+                cameras.add(camera);
+                cameras2.add(camera);
             }
         }
 
@@ -137,6 +164,8 @@ public class Room {
         int group = 0;
         int max = 0;
 
+
+        //cần viết lại tránh remove trong list
         while(group <= limit && max != copy_coordiantes.size())
         {
             for (Coordinate coordinate : copy_coordiantes) {
