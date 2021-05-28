@@ -1,0 +1,13 @@
+File input generate dãy nhị phân random với độ dài n và số lượng m (tương đương với n camera và m tọa độ)
+File output đưa ra kết quả tách nhóm theo số lượng bit 1 tại cùng một vị trí dễ thấy mỗi nhóm đều có ít nhất 1 vị trí bit có cùng giá trị 1
+Khi chạy chương trình Demo.cpp sẽ tự động tạo ra m dãy nhị phân độ dài n và ghi vào file input.txt
+Sau đó chương trình đọc file input.txt rồi xuất kết quả vào file output.txt
+Mỗi tọa độ sẽ có 1 dãy nhị phân như trong file input. Giá trị 0 1 tại bit thứ i cho biết camera thứ i có nhìn thấy điểm ở tọa độ đó hay không.
+VD: tọa độ a có 0101101 => camera[0] không nhìn thấy tọa độ a, còn camera[1] thì nhìn thấy
+
+Bằng việc nhóm như trên ta xác định được vùng lớn nhất mà mỗi camera có thể nhìn được mà từng vùng nhìn thấy của mỗi camera đều độc lập không đè lên nhau
+Qua đó xác định được số lượng camera tối ưu để có thể nhìn được toàn bộ căn phòng
+Theo kết quả trong output nhóm đầu tiên là nhóm lớn nhất gồm những tọa độ mà nhìn thấy bởi 1 camera.
+Kích thước của nhóm sẽ nhỏ dần cho đến khi:
++) Không còn tọa độ để nhóm
++) Chỉ tồn tại những dãy nhị phân có giá trị 0 => điểm này không thể nhìn thấy bởi bất kì camera nào
