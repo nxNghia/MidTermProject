@@ -1,6 +1,6 @@
 public class test {
     public static void main(String[] args) {
-        Room room = new Room(2,1,1,2);
+        Room room = new Room(2,1,1,2, 1);
         double[] x = {0.5,1.5,1.5,0.5,0.5,1.5,1.5,0.5};
         double[] y = {0.25,0.25,0.75,0.75,0.25,0.25,0.75,0.75};
         double[] z = {0.0,0.0,0.0,0.0,1.0,1.0,1.0,1.0};

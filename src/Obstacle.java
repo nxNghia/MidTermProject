@@ -12,11 +12,8 @@ public class Obstacle {
     private ArrayList<Double> top4;
 
     private ArrayList<Double> surface1;
-
     private ArrayList<Double> surface2;
-
     private ArrayList<Double> surface3;
-
     private ArrayList<Double> surface4;
     private ArrayList<Double> surface5;
     private String color;
@@ -31,6 +28,7 @@ public class Obstacle {
         ArrayList<Double> top_2 = new ArrayList<>();
         ArrayList<Double> top_3 = new ArrayList<>();
         ArrayList<Double> top_4 = new ArrayList<>();
+
         bot_1.add(x[0]);bot_1.add(y[0]);bot_1.add(z[0]);
         bot_2.add(x[1]);bot_2.add(y[1]);bot_2.add(z[1]);
         bot_3.add(x[2]);bot_3.add(y[2]);bot_3.add(z[2]);
@@ -39,6 +37,7 @@ public class Obstacle {
         top_2.add(x[5]);bot_1.add(y[5]);bot_1.add(z[5]);
         top_3.add(x[6]);top_3.add(y[6]);top_3.add(z[6]);
         top_4.add(x[7]);top_4.add(y[7]);top_4.add(z[7]);
+
         setBottom1(bot_1);
         setBottom2(bot_2);
         setBottom3(bot_3);
@@ -52,50 +51,62 @@ public class Obstacle {
         setColor(color);
 
         //Tạo các mặt phẳng tọa độ
-
+        setSurface1();
+        setSurface2();
+        setSurface3();
+        setSurface4();
+        setSurface5();
     }
 
     //Trả về mặt phẳng đi qua 4 tọa độ c1, c2, c3, c4
     //ax + by + cz = d
     //12 giá trị sau là biên của mặt phẳng
 
-    private ArrayList<Double> getSurface(double xA, double yA,double zA,double xB,double yB,double zB,double xC,
-                                          double yC,double zC,double xD,double yD,double zD)
+    private ArrayList<Double> getSurface(ArrayList<Double> A, ArrayList<Double> B, ArrayList<Double> C, ArrayList<Double> D)
     {
         ArrayList<Double> result = new ArrayList<>();
-        if(zB == zC)
+        if(B.get(2).equals(C.get(2)))
         {
             result.add(0.0);  //a
             result.add(0.0);  //b
             result.add(1.0);  //c
 
-            result.add(zA);  //d
+            result.add(A.get(0));  //d
         }else{
-            double x =xA - xB;
-            double y = yA - yB;
+            double x1 = A.get(0) - B.get(0);
+            double y1 = A.get(1) - B.get(1);
+            double z1 = A.get(2) - B.get(2);
 
-            result.add(y);  //a
-            result.add(-x); //b
-            result.add(0.0);  //c
+            double x2 = A.get(0) - C.get(0);
+            double y2 = A.get(1) - C.get(1);
+            double z2 = A.get(2) - C.get(2);
 
-            result.add(y * xA - x * yB);  //d
+            double n1 = y1 * z2 - y2 * z1;
+            double n2 = z1 * x2 - z2 * x1;
+            double n3 = x1 * y2 - y1 * x2;
+
+            result.add(n1);  //a
+            result.add(n2); //b
+            result.add(n3);  //c
+
+            result.add(n1 * A.get(0) + n2 * A.get(1) + n3 * A.get(2));  //d
         }
 
-        result.add(xA);
-        result.add(yA);
-        result.add(zA);
+        result.add(A.get(0));
+        result.add(A.get(1));
+        result.add(A.get(2));
 
-        result.add(xB);
-        result.add(yB);
-        result.add(zB);
+        result.add(B.get(0));
+        result.add(B.get(1));
+        result.add(B.get(2));
 
-        result.add(xC);
-        result.add(yC);
-        result.add(zC);
+        result.add(C.get(0));
+        result.add(C.get(1));
+        result.add(C.get(2));
 
-        result.add(xD);
-        result.add(yD);
-        result.add(zD);
+        result.add(D.get(0));
+        result.add(D.get(1));
+        result.add(D.get(2));
 
         return result;
     }
@@ -198,68 +209,24 @@ public class Obstacle {
         this.color = color;
     }
 
-    public void setSurface1(ArrayList<Double> surface1) {
-//        ArrayList<Double> result = new ArrayList<>();
-//        result.add(0.0);
-//        result.add(1.0);
-//        result.add(0.0);
-//        result.add(0.0-bottom1.get(1));
-//        result.add(bottom1.get(0));result.add(bottom1.get(1));result.add(bottom1.get(2));
-//        result.add(bottom2.get(0));result.add(bottom2.get(1));result.add(bottom2.get(2));
-//        result.add(top2.get(0));result.add(top2.get(1));result.add(top2.get(2));
-//        result.add(top1.get(0));result.add(top1.get(1));result.add(top1.get(2));
-        this.surface1 = surface1;
+    public void setSurface1() {
+        this.surface1 = getSurface(bottom1, bottom2, top1, top2);
     }
 
-    public void setSurface2(ArrayList<Double> surface2) {
-//        ArrayList<Double> result = new ArrayList<>();
-//        result.add(1.0);
-//        result.add(0.0);
-//        result.add(0.0);
-//        result.add(0.0-bottom2.get(0));
-//        result.add(bottom3.get(0));result.add(bottom3.get(1));result.add(bottom3.get(2));
-//        result.add(bottom2.get(0));result.add(bottom2.get(1));result.add(bottom2.get(2));
-//        result.add(top2.get(0));result.add(top2.get(1));result.add(top2.get(2));
-//        result.add(top3.get(0));result.add(top3.get(1));result.add(top3.get(2));
-        this.surface2 = surface2;
+    public void setSurface2() {
+
+        this.surface2 = getSurface(bottom2, bottom3, top2, top3);
     }
 
-    public void setSurface3(ArrayList<Double> surface3) {
-//        ArrayList<Double> result = new ArrayList<>();
-//        result.add(0.0);
-//        result.add(1.0);
-//        result.add(0.0);
-//        result.add(0.0-bottom3.get(1));
-//        result.add(bottom3.get(0));result.add(bottom3.get(1));result.add(bottom3.get(2));
-//        result.add(bottom4.get(0));result.add(bottom4.get(1));result.add(bottom4.get(2));
-//        result.add(top4.get(0));result.add(top4.get(1));result.add(top4.get(2));
-//        result.add(top3.get(0));result.add(top3.get(1));result.add(top3.get(2));
-        this.surface3 = surface3;
+    public void setSurface3() {
+        this.surface3 = getSurface(bottom3, bottom4, top3, top4);
     }
 
-    public void setSurface4(ArrayList<Double> surface4) {
-//        ArrayList<Double> result = new ArrayList<>();
-//        result.add(1.0);
-//        result.add(0.0);
-//        result.add(0.0);
-//        result.add(0.0-bottom1.get(0));
-//        result.add(bottom1.get(0));result.add(bottom1.get(1));result.add(bottom1.get(2));
-//        result.add(bottom4.get(0));result.add(bottom4.get(1));result.add(bottom4.get(2));
-//        result.add(top4.get(0));result.add(top4.get(1));result.add(top4.get(2));
-//        result.add(top1.get(0));result.add(top1.get(1));result.add(top1.get(2));
-        this.surface4 = surface4;
+    public void setSurface4() {
+        this.surface4 = getSurface(bottom4, bottom1, top4, top1);
     }
 
-    public void setSurface5(ArrayList<Double> surface5) {
-//        ArrayList<Double> result = new ArrayList<>();
-//        result.add(0.0);
-//        result.add(0.0);
-//        result.add(1.0);
-//        result.add(0.0-top1.get(2));
-//        result.add(top4.get(0));result.add(top4.get(1));result.add(top4.get(2));
-//        result.add(top3.get(0));result.add(top3.get(1));result.add(top3.get(2));
-//        result.add(top2.get(0));result.add(top2.get(1));result.add(top2.get(2));
-//        result.add(top1.get(0));result.add(top1.get(1));result.add(top1.get(2));
-        this.surface5 = surface5;
+    public void setSurface5() {
+        this.surface5 = getSurface(top1, top2, top3, top4);
     }
 }
