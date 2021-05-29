@@ -1,10 +1,12 @@
 import java.util.ArrayList;
+import java.util.BitSet;
 
 public class Coordinate {
     private int x;
     private int y;
     private int z;
     private StringBuilder seenByCameras;    //cho biết điểm này có thể nhìn thấy bởi camera nào
+    private ArrayList<Boolean> seenByCameras_;
 
     private boolean canSee; // điểm có thể nhìn thấy không
 
@@ -14,11 +16,18 @@ public class Coordinate {
         setZ(z);
 
         seenByCameras = new StringBuilder(length * width);
+        seenByCameras_ = new ArrayList<>();
         //ban đầu set tất cả phần tử của chuỗi bằng 0
-        for (int i = 0; i < seenByCameras.length(); ++i)
+        for (int i = 0; i < length * width; ++i)
         {
-            seenByCameras.setCharAt(i, '0');
+            seenByCameras_.add(false);
+//            seenByCameras.setCharAt(i, '0');
         }
+//        System.out.println(seenByCameras);
+    }
+
+    public ArrayList<Boolean> getSeenByCameras_() {
+        return seenByCameras_;
     }
 
     public void setX(int x) {
@@ -226,7 +235,7 @@ public class Coordinate {
     {
         double deltaAlpha = 0;
         double deltaBeta = 0;
-        if(camera.getWall()==2||camera.getWall()==4)
+        if(camera.getWall()==2 || camera.getWall()==4)
         {
             deltaAlpha = angleXOY(this.getX(),this.getY(),camera.getZ(),this.getX(),camera.getY(),camera.getZ(),
                     camera.getX(),camera.getY(),camera.getZ());
@@ -248,7 +257,9 @@ public class Coordinate {
                     camera.getX(),camera.getY(),camera.getZ());
         }
         if(deltaAlpha<=camera.getLengthVision()&&deltaBeta<=camera.getWidthVision())
+        {
             return true;
+        }
         return false;
     }
 
@@ -270,11 +281,12 @@ public class Coordinate {
             int id = camera.getID();
             if(inVision(camera)) //xét xem có trong góc nhìn camera không
             {
-                int check =1;
+                int check = 1;
                 for(Obstacle obstacle : obstacles )
                 {
                     if(obstacle.getTop1().get(2) > getZ())
                     {
+
                         ArrayList<Double> line = getVector(camera.getX(),camera.getY(),camera.getZ());
                         ArrayList<Double> face1 = obstacle.getSurface1();
                         ArrayList<Double> face2 = obstacle.getSurface2();
@@ -292,7 +304,9 @@ public class Coordinate {
                 if(check==1)
                 {
                     setCanSee(true);
-                    seenByCameras.setCharAt(id-1, '1');
+//                    System.out.println(seenByCameras);
+//                    seenByCameras.setCharAt(id-1, '1');
+                    seenByCameras_.add(id-1, true);
                 }
                 else
                     setCanSee(false);

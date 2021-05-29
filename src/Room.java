@@ -259,8 +259,7 @@ public class Room {
             }
         }
         int qtyCoordinateOutside = length*width*height - insideObstacle.size();
-        double result  = count/qtyCoordinateOutside;
-        return result;
+        return (double)count/qtyCoordinateOutside;
     }
     public void addCamera(Camera camera)
     {

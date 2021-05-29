@@ -34,7 +34,7 @@ public class Obstacle {
         bot_3.add(x[2]);bot_3.add(y[2]);bot_3.add(z[2]);
         bot_4.add(x[3]);bot_4.add(y[3]);bot_4.add(z[3]);
         top_1.add(x[4]);top_1.add(y[4]);top_1.add(z[4]);
-        top_2.add(x[5]);bot_1.add(y[5]);bot_1.add(z[5]);
+        top_2.add(x[5]);top_2.add(y[5]);top_2.add(z[5]);
         top_3.add(x[6]);top_3.add(y[6]);top_3.add(z[6]);
         top_4.add(x[7]);top_4.add(y[7]);top_4.add(z[7]);
 
