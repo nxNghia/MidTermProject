@@ -5,7 +5,7 @@ public class Coordinate {
     private int x;
     private int y;
     private int z;
-    private StringBuilder seenByCameras;    //cho biết điểm này có thể nhìn thấy bởi camera nào
+//    private StringBuilder seenByCameras;    //cho biết điểm này có thể nhìn thấy bởi camera nào
     private ArrayList<Boolean> seenByCameras_;
 
     private boolean canSee; // điểm có thể nhìn thấy không
@@ -15,7 +15,7 @@ public class Coordinate {
         setY(y);
         setZ(z);
 
-        seenByCameras = new StringBuilder(length * width);
+//        seenByCameras = new StringBuilder(length * width);
         seenByCameras_ = new ArrayList<>();
         //ban đầu set tất cả phần tử của chuỗi bằng 0
         for (int i = 0; i < length * width; ++i)
@@ -50,9 +50,9 @@ public class Coordinate {
         this.z = z;
     }
 
-    public void setSeenByCameras(StringBuilder seenByCameras) {
-        this.seenByCameras = seenByCameras;
-    }
+//    public void setSeenByCameras(StringBuilder seenByCameras) {
+//        this.seenByCameras = seenByCameras;
+//    }
 
     public int getX() {
         return x;
@@ -66,9 +66,12 @@ public class Coordinate {
         return z;
     }
 
-    public StringBuilder getSeenByCameras() {
-        return seenByCameras;
+    public void setSeenByCameras_(ArrayList<Boolean> seenByCameras_) {
+        this.seenByCameras_ = seenByCameras_;
     }
+//    public StringBuilder getSeenByCameras() {
+//        return seenByCameras;
+//    }
 
     //3 số đầu là tọa độ vector, 3 số sau là điểm mà vector đi qua
     //x = a' * t + a
@@ -95,26 +98,6 @@ public class Coordinate {
 //
 //        return _x + _y + _z;
 //    }
-
-    //hàm swap giá trị của hai biến Coordinate
-    public static void swap(Coordinate c1, Coordinate c2)
-    {
-        int tmp = c1.getX();
-        c1.setX(c2.getX());
-        c2.setX(tmp);
-
-        tmp = c1.getY();
-        c1.setY(c2.getY());
-        c2.setY(tmp);
-
-        tmp = c1.getZ();
-        c1.setZ(c2.getZ());
-        c2.setZ(tmp);
-
-        StringBuilder tmp2 = c1.getSeenByCameras();
-        c1.setSeenByCameras(c2.getSeenByCameras());
-        c2.setSeenByCameras(tmp2);
-    }
 
     public double angleXOY(double xX, double yX, double zX, double xY, double yY, double zY, double xO, double yO, double zO)
     {

@@ -162,76 +162,76 @@ public class Room {
         {
             for (Coordinate coordinate : copy_coordiantes)
             {
-                int camera_id = coordinate.getSeenByCameras().indexOf("1");
+                int camera_id = coordinate.getSeenByCameras_().indexOf(true);
                 if(Camera.findCamera(camera_id, cameras2) == null)
                     copy_coordiantes.remove(coordinate);
             }
         }
 
         int result = 0;
-
-        //Thuật toán nhóm theo từng nhóm sao cho số camera = limit
-        //Tính tổng số tọa độ mà mỗi camera nhìn được
-        List<Integer> sum = new ArrayList<Integer>();
-        for (int i = 0; i < coordinates.length; ++i)
-        {
-            int count = 0;
-            for (Coordinate coordinate : copy_coordiantes)
-            {
-                if(coordinate.getSeenByCameras().charAt(i) == '1') {
-                    ++count;
-                }
-            }
-            sum.add(count);
-        }
-
-        int group = 0;
-
-        //cần viết lại tránh remove trong list
-        while(group <= limit && copy_coordiantes.size() != 0 && Collections.max(sum) != 0)
-        {
-            //Tìm được nhóm mới
-            ++group;
-
-            for (Coordinate coordinate : copy_coordiantes)
-            {
-                if(coordinate.getSeenByCameras().charAt(sum.indexOf(Collections.max(sum))) == '1')
-                {
-                    //sửa lại dãy sum
-                    for (int i = 0; i < coordinate.getSeenByCameras().length(); ++i)
-                    {
-                        if(coordinate.getSeenByCameras().charAt(i) == '1')
-                        {
-                            int tmp = sum.get(i);
-                            --tmp;
-                            sum.set(i, tmp);
-                        }
-                    }
-
-                    //Nếu ID của camera nằm trong nhóm cameras2 => đây là camera mới thêm vào
-                    if (Camera.findCamera
-                            (sum.indexOf(Collections.max(sum)) + 1, cameras2) != null)
-                    {
-                        System.out.println("Lap them camera o toa do: x = " + coordinate.getX()
-                                + ", y = " + coordinate.getY());
-                    }
-                    copy_coordiantes.remove(coordinate);
-                }
-            }
-        }
-
-        //Xóa những camera đã thêm trong hàm này
-        for (Camera camera : cameras)
-        {
-            for (Camera camera1 : cameras2)
-            {
-                if(camera.getID() == camera1.getID())
-                {
-                    cameras.remove(camera);
-                    break;
-                }
-            }
-        }
+//
+//        //Thuật toán nhóm theo từng nhóm sao cho số camera = limit
+//        //Tính tổng số tọa độ mà mỗi camera nhìn được
+//        List<Integer> sum = new ArrayList<Integer>();
+//        for (int i = 0; i < coordinates.length; ++i)
+//        {
+//            int count = 0;
+//            for (Coordinate coordinate : copy_coordiantes)
+//            {
+//                if(coordinate.getSeenByCameras_().set(i, true)) {
+//                    ++count;
+//                }
+//            }
+//            sum.add(count);
+//        }
+//
+//        int group = 0;
+//
+//        //cần viết lại tránh remove trong list
+//        while(group <= limit && copy_coordiantes.size() != 0 && Collections.max(sum) != 0)
+//        {
+//            //Tìm được nhóm mới
+//            ++group;
+//
+//            for (Coordinate coordinate : copy_coordiantes)
+//            {
+//                if(coordinate.getSeenByCameras_().get(sum.indexOf(Collections.max(sum))))
+//                {
+//                    //sửa lại dãy sum
+//                    for (int i = 0; i < coordinate.getSeenByCameras_().size(); ++i)
+//                    {
+//                        if(coordinate.getSeenByCameras_().get(i))
+//                        {
+//                            int tmp = sum.get(i);
+//                            --tmp;
+//                            sum.set(i, tmp);
+//                        }
+//                    }
+//
+//                    //Nếu ID của camera nằm trong nhóm cameras2 => đây là camera mới thêm vào
+//                    if (Camera.findCamera
+//                            (sum.indexOf(Collections.max(sum)) + 1, cameras2) != null)
+//                    {
+//                        System.out.println("Lap them camera o toa do: x = " + coordinate.getX()
+//                                + ", y = " + coordinate.getY());
+//                    }
+//                    copy_coordiantes.remove(coordinate);
+//                }
+//            }
+//        }
+//
+//        //Xóa những camera đã thêm trong hàm này
+//        for (Camera camera : cameras)
+//        {
+//            for (Camera camera1 : cameras2)
+//            {
+//                if(camera.getID() == camera1.getID())
+//                {
+//                    cameras.remove(camera);
+//                    break;
+//                }
+//            }
+//        }
 
         return result;
     }

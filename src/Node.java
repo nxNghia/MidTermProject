@@ -4,11 +4,10 @@ public class Node implements Comparable<Node> {
     public boolean isLeft;
     public double coefficient;
 
-    public Node(double x, double y, boolean left)
+    public Node(double x, double y)
     {
         this.x = x;
         this.y = y;
-        this.isLeft = left;
     }
 
     public void setK(Node from)
@@ -18,23 +17,28 @@ public class Node implements Comparable<Node> {
 //        System.out.println(this.coefficient);
     }
 
+    public void setK2(Node from)
+    {
+        this.coefficient = (from.y - this.y) / Math.abs(this.x - from.x);
+    }
+
     public Node scaleUp(Node from, Line line)
     {
         if(line.left.x == line.right.x)
         {
             double ratio = Math.abs(line.left.x - from.x) / Math.abs(this.x - from.x) * (this.y - from.y);
-            Node node = new Node(line.left.x, from.y + ratio, false);
+            Node node = new Node(line.left.x, from.y + ratio);
             return node;
         }else{
             double ratio = Math.abs(line.left.y - from.y) / Math.abs(this.y - from.y) * (this.x - from.x);
-            Node node = new Node(from.x + ratio, line.left.y, false);
+            Node node = new Node(from.x + ratio, line.left.y);
             return node;
         }
     }
 
     public void getNode()
     {
-        System.out.println(this.x + " " + this.y);
+        System.out.println(this.x + " " + this.y + " " + this.coefficient);
     }
 
     @Override
